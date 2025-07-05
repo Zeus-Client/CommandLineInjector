@@ -30,21 +30,18 @@ int ProcUtils::getMinecraftPID()
 
 int ProcUtils::getModulesCount(DWORD pID)
 {
-    HANDLE moduleSnap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, pID);
-    if (moduleSnap == INVALID_HANDLE_VALUE) return 0;
+    HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, pID);
 
-    MODULEENTRY32 me32;
-    me32.dwSize = sizeof(MODULEENTRY32);
+    MODULEENTRY32 module;
+    module.dwSize = sizeof(module);
 
-    if (!Module32First(moduleSnap, &me32))
+    int count = 0;
+    if (Module32First(snapshot, &module))
     {
-        CloseHandle(moduleSnap);
-        return 0;
+        do { ++count; }
+        while (Module32Next(snapshot, &module));
     }
 
-    int count = 1;
-    while (Module32Next(moduleSnap, &me32)) count++;
-
-    CloseHandle(moduleSnap);
+    CloseHandle(snapshot);
     return count;
 }

@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
         std::println("No Minecraft found! Starting Minecraft...");
         system("start minecraft:");
 
-        Sleep(1000);
+        Sleep(500);
 
         pID = ProcUtils::getMinecraftPID();
         if (pID == NULL)
@@ -43,7 +43,7 @@ int main(int argc, char* argv[])
     std::println("Found Minecraft! pID: {}", pID);
     std::println("Waiting for Minecraft to load...");
 
-    while (ProcUtils::getModulesCount(pID) > 140) Sleep(10);
+    while (ProcUtils::getModulesCount(pID) <= 140) { Sleep(10); }
 
     std::println("Minecraft loaded! Injecting DLL...");
 
